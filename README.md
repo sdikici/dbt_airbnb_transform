@@ -3,7 +3,7 @@ Welcome to airbnb dbt project!
 ### Using the starter project
 
 
-+models:
+models:
 
   dbtlearn:
   
@@ -16,6 +16,9 @@ Welcome to airbnb dbt project!
     src:
     
       +materialized: ephemeral
+
+
+      
 
 ![Screenshot 2024-08-24 114750](https://github.com/user-attachments/assets/ee336fbd-0ed9-4c9f-9827-089f90c32539)
 
