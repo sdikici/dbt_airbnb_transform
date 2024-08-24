@@ -4,7 +4,6 @@ Welcome to airbnb dbt project!
 
 
 models:
-
   dbtlearn:
   
     +materialized: view
