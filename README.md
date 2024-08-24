@@ -2,6 +2,7 @@ Welcome to airbnb dbt project!
 
 ### Using the starter project
 
+
 models:
 
   dbtlearn:
