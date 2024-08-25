@@ -1,11 +1,32 @@
--- back compat for old kwarg name
+
   
-  begin;
     
 
-        insert into AIRBNB.DEV.fct_reviews ("LISTING_ID", "REVIEW_DATE", "REVIEWER_NAME", "REVIEW_TEXT", "REVIEW_SENTIMENT")
-        (
-            select "LISTING_ID", "REVIEW_DATE", "REVIEWER_NAME", "REVIEW_TEXT", "REVIEW_SENTIMENT"
-            from AIRBNB.DEV.fct_reviews__dbt_tmp
+        create or replace transient table AIRBNB.DEV.fct_reviews
+         as
+        (--we create an incremental materialization here for appends
+
+
+with  __dbt__cte__src_reviews as (
+with raw_reviews as (
+select * from AIRBNB.raw.raw_reviews
+)
+select
+listing_id,
+date as review_date,
+reviewer_name,
+comments as review_text,
+sentiment as review_sentiment
+from raw_reviews
+), src_reviews as (SELECT * from __dbt__cte__src_reviews)
+
+SELECT 
+  md5(cast(coalesce(cast(listing_id as TEXT), '_dbt_utils_surrogate_key_null_') || '-' || coalesce(cast(review_date as TEXT), '_dbt_utils_surrogate_key_null_') || '-' || coalesce(cast(reviewer_name as TEXT), '_dbt_utils_surrogate_key_null_') || '-' || coalesce(cast(review_text as TEXT), '_dbt_utils_surrogate_key_null_') as TEXT))
+    AS review_id,
+  *  
+FROM src_reviews
+WHERE review_text is not null
+
         );
-    commit;
+      
+  
